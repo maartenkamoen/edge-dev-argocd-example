@@ -1,0 +1,45 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: metrics-server
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+        values:
+          targetRevision: 3.12.2
+    - clusters:
+        selector:
+          matchLabels:
+            environment: prd
+        values:
+          targetRevision: 3.12.2
+  template:
+    metadata:
+      name: 'metrics-server'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        chart: metrics-server
+        repoURL: https://kubernetes-sigs.github.io/metrics-server/
+        targetRevision: '{{values.targetRevision}}'
+        helm:
+          releaseName: metrics-server
+          valuesObject:
+            crds:
+              enabled: true
+              keep: true
+      destination:
+        server: '{{server}}'
+        namespace: metrics-server
