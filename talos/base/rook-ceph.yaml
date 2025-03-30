@@ -10,6 +10,7 @@ spec:
         selector:
           matchLabels:
             environment: tst
+            site: nijmegen01
         values:
           targetRevision: v1.16.6
   template:
@@ -45,6 +46,7 @@ spec:
         selector:
           matchLabels:
             environment: tst
+            site: nijmegen01
         values:
           targetRevision: v1.16.6
   template:
