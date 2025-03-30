@@ -2,50 +2,6 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cert-manager-crd
-spec:
-  generators:
-    - clusters:
-        selector:
-          matchLabels:
-            environment: tst
-        values:
-          targetRevision: v1.17.1
-    - clusters:
-        selector:
-          matchLabels:
-            environment: acc
-        values:
-          targetRevision: v1.17.1
-    - clusters:
-        selector:
-          matchLabels:
-            environment: prd
-        values:
-          targetRevision: v1.17.0
-  template:
-    metadata:
-      name: 'cert-manager-crd--{{name}}'
-    spec:
-      project: default
-      syncPolicy:
-        automated:
-          prune: true
-          allowEmpty: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-          - ServerSideApply=true
-      source:
-        repoURL: https://github.com/cert-manager/cert-manager
-        targetRevision: '{{values.targetRevision}}'
-        path: deploy/crds
-      destination:
-        server: '{{server}}'
----
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
   name: cert-manager-helm
 spec:
   generators:
@@ -69,7 +25,7 @@ spec:
           targetRevision: 1.17.0
   template:
     metadata:
-      name: 'cert-manager-helm--{{name}}'
+      name: 'cert-manager'
     spec:
       project: default
       syncPolicy:
@@ -87,26 +43,9 @@ spec:
         helm:
           releaseName: cert-manager
           valuesObject:
-            webhook:
-              securePort: 1025
-          #   affinity:
-          #     nodeAffinity:
-          #       requiredDuringSchedulingIgnoredDuringExecution:
-          #         nodeSelectorTerms:
-          #           - matchExpressions:
-          #               - key: 'multi-az'
-          #                 operator: In
-          #                 values:
-          #                   - 'true'
-          #               - key: nodegroup
-          #                 operator: In
-          #                 values:
-          #                   - system
-            tolerations:
-              - key: role
-                operator: Equal
-                value: system
-                effect: NoSchedule
+            crds:
+              enabled: true
+              keep: true
       destination:
         server: '{{server}}'
         namespace: cert-manager
