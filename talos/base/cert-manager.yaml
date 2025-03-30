@@ -8,19 +8,19 @@ spec:
     - clusters:
         selector:
           matchLabels:
-            env: dev
+            environment: tst
         values:
           targetRevision: 1.17.1
     - clusters:
         selector:
           matchLabels:
-            env: acc
+            environment: acc
         values:
           targetRevision: 1.17.1
     - clusters:
         selector:
           matchLabels:
-            env: prd
+            environment: prd
         values:
           targetRevision: 1.17.0
   template:
@@ -52,21 +52,21 @@ spec:
     - clusters:
         selector:
           matchLabels:
-            env: dev
+            environment: tst
             devopstest: "false"
         values:
           targetRevision: 1.17.1
     - clusters:
         selector:
           matchLabels:
-            env: acc
+            environment: acc
             devopstest: "false"
         values:
           targetRevision: 1.17.1
     - clusters:
         selector:
           matchLabels:
-            env: prd
+            environment: prd
         values:
           targetRevision: 1.17.0
   template:
