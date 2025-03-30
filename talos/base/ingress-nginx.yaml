@@ -22,12 +22,6 @@ spec:
     - clusters:
         selector:
           matchLabels:
-            environment: acc
-        values:
-          targetRevision: 4.12.1
-    - clusters:
-        selector:
-          matchLabels:
             environment: prd
         values:
           targetRevision: 4.11.5
