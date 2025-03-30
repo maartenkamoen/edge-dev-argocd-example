@@ -53,14 +53,12 @@ spec:
         selector:
           matchLabels:
             environment: tst
-            devopstest: "false"
         values:
           targetRevision: 1.17.1
     - clusters:
         selector:
           matchLabels:
             environment: acc
-            devopstest: "false"
         values:
           targetRevision: 1.17.1
     - clusters:
