@@ -1,0 +1,89 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: rook-ceph-operator
+  namespace: argocd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+        values:
+          targetRevision: v1.16.6
+  template:
+    metadata:
+      name: 'rook-ceph-operator'
+    spec:
+      project: default
+      source:
+        chart: rook-ceph
+        repoURL: https://charts.rook.io/release
+        targetRevision: '{{values.targetRevision}}'
+        helm:
+          releaseName: rook-ceph
+      destination:
+        server: '{{server}}'
+        namespace: rook-ceph
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: rook-ceph-cluster
+#   namespace: argocd
+# spec:
+#   generators:
+#     - clusters:
+#         selector:
+#           matchLabels:
+#             environment: tst
+#         values:
+#           targetRevision: v1.16.6
+#   template:
+#     metadata:
+#       name: 'rook-ceph-cluster'
+#     spec:
+#       project: default
+#       source:
+#         chart: rook-ceph-cluster
+#         repoURL: https://charts.rook.io/release
+#         targetRevision: '{{values.targetRevision}}'
+#         helm:
+#           releaseName: rook-ceph-cluster
+#           values: |
+#             toolbox:
+#               enabled: true
+#             cephClusterSpec:
+#               mgr:
+#                 modules:
+#                   - name: rook
+#                     enabled: true
+#               dashboard:
+#                 enabled: true
+#                 port: 8080
+#                 ssl: false
+#             storage:
+#               useAllNodes: true
+#               useAllDevices: false
+#               deviceFilter: vdb
+#             cephBlockPools: {}
+#             cephFileSystems: {}
+#             cephObjectStores: {}
+#       destination:
+#         server: '{{server}}'
+#         namespace: rook-ceph
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           allowEmpty: true
+#           selfHeal: true
+#         syncOptions:
+#           - CreateNamespace=true
