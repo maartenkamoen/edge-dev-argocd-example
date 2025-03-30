@@ -10,19 +10,19 @@ spec:
           matchLabels:
             environment: tst
         values:
-          targetRevision: 1.17.1
+          targetRevision: v1.17.1
     - clusters:
         selector:
           matchLabels:
             environment: acc
         values:
-          targetRevision: 1.17.1
+          targetRevision: v1.17.1
     - clusters:
         selector:
           matchLabels:
             environment: prd
         values:
-          targetRevision: 1.17.0
+          targetRevision: v1.17.0
   template:
     metadata:
       name: 'cert-manager-crd--{{name}}'
