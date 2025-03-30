@@ -1,0 +1,38 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: longhorn
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+            site: nijmegen01
+        values:
+          targetRevision: v1.8.1
+  template:
+    metadata:
+      name: 'longhorn'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        chart: longhorn
+        repoURL: https://charts.longhorn.io/
+        targetRevision: '{{values.targetRevision}}'
+        helm:
+          values: |
+            preUpgradeChecker:
+              jobEnabled: false
+      destination:
+        server: '{{server}}'
+        namespace: longhorn-system
