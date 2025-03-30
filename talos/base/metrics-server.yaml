@@ -40,6 +40,8 @@ spec:
             crds:
               enabled: true
               keep: true
+            # https://www.talos.dev/v1.9/kubernetes-guides/configuration/deploy-metrics-server/#install-during-bootstrap
+            args: "--kubelet-insecure-tls"
       destination:
         server: '{{server}}'
         namespace: metrics-server
