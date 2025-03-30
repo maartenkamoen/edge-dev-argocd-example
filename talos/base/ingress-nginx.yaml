@@ -2,30 +2,38 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cert-manager
+  name: ingress-nginx
 spec:
   generators:
     - clusters:
         selector:
           matchLabels:
             environment: tst
+            site: nijmegen01
         values:
-          targetRevision: 1.17.1
+          targetRevision: 4.12.1
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+            site: nijmegen02
+        values:
+          targetRevision: 4.12.0
     - clusters:
         selector:
           matchLabels:
             environment: acc
         values:
-          targetRevision: 1.17.1
+          targetRevision: 4.12.1
     - clusters:
         selector:
           matchLabels:
             environment: prd
         values:
-          targetRevision: 1.17.0
+          targetRevision: 4.11.5
   template:
     metadata:
-      name: 'cert-manager'
+      name: 'ingress-nginx'
     spec:
       project: default
       syncPolicy:
@@ -37,15 +45,11 @@ spec:
           - CreateNamespace=true
           - ServerSideApply=true
       source:
-        chart: cert-manager
-        repoURL: https://charts.jetstack.io
+        chart: ingress-nginx
+        repoURL: https://kubernetes.github.io/ingress-nginx
         targetRevision: '{{values.targetRevision}}'
         helm:
-          releaseName: cert-manager
-          valuesObject:
-            crds:
-              enabled: true
-              keep: true
+          releaseName: ingress-nginx
       destination:
         server: '{{server}}'
-        namespace: cert-manager
+        namespace: ingress-nginx
