@@ -1,0 +1,114 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cert-manager-crd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            env: dev
+        values:
+          targetRevision: 1.17.1
+    - clusters:
+        selector:
+          matchLabels:
+            env: acc
+        values:
+          targetRevision: 1.17.1
+    - clusters:
+        selector:
+          matchLabels:
+            env: prd
+        values:
+          targetRevision: 1.17.0
+  template:
+    metadata:
+      name: 'cert-manager-crd--{{name}}'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/cert-manager/cert-manager
+        targetRevision: '{{values.targetRevision}}'
+        path: deploy/crds
+      destination:
+        server: '{{server}}'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cert-manager-helm
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            env: dev
+            devopstest: "false"
+        values:
+          targetRevision: 1.17.1
+    - clusters:
+        selector:
+          matchLabels:
+            env: acc
+            devopstest: "false"
+        values:
+          targetRevision: 1.17.1
+    - clusters:
+        selector:
+          matchLabels:
+            env: prd
+        values:
+          targetRevision: 1.17.0
+  template:
+    metadata:
+      name: 'cert-manager-helm--{{name}}'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        chart: cert-manager
+        repoURL: https://charts.jetstack.io
+        targetRevision: '{{values.targetRevision}}'
+        helm:
+          releaseName: cert-manager
+          valuesObject:
+            webhook:
+              securePort: 1025
+          #   affinity:
+          #     nodeAffinity:
+          #       requiredDuringSchedulingIgnoredDuringExecution:
+          #         nodeSelectorTerms:
+          #           - matchExpressions:
+          #               - key: 'multi-az'
+          #                 operator: In
+          #                 values:
+          #                   - 'true'
+          #               - key: nodegroup
+          #                 operator: In
+          #                 values:
+          #                   - system
+            tolerations:
+              - key: role
+                operator: Equal
+                value: system
+                effect: NoSchedule
+      destination:
+        server: '{{server}}'
+        namespace: cert-manager
