@@ -1,3 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: longhorn-ns
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+            site: nijmegen01
+        values:
+          targetRevision: main
+  template:
+    metadata:
+      name: 'longhorn-ns'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
+        targetRevision: '{{values.targetRevision}}'
+        path: talos/custom/longhorn
+      destination:
+        server: '{{server}}'
+        namespace: 'kube-system'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -23,7 +56,7 @@ spec:
           allowEmpty: true
           selfHeal: true
         syncOptions:
-          - CreateNamespace=true
+          - CreateNamespace=false
           - ServerSideApply=true
       source:
         chart: longhorn
