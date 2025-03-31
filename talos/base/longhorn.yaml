@@ -27,7 +27,7 @@ spec:
       source:
         repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
         targetRevision: '{{values.targetRevision}}'
-        path: talos/custom/longhorn
+        path: talos/add-ons/longhorn
       destination:
         server: '{{server}}'
         namespace: 'kube-system'

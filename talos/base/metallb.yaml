@@ -1,0 +1,77 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: metallb
+  namespace: argocd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+            site: nijmegen01
+        values:
+          targetRevision: '{{values.targetRevision}}'
+  template:
+    metadata:
+      name: '{{name}}--metallb'
+    spec:
+      project: default
+      sources:
+        - chart: metallb
+          repoURL: https://metallb.github.io/metallb
+          targetRevision: v0.14.9
+          helm:
+            releaseName: metallb
+      destination:
+        server: '{{server}}'
+        namespace: metallb-system
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: metallb-config
+  namespace: argocd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+            site: nijmegen01
+        values:
+          metallb_addresspool: 192.168.122.100-192.168.122.110
+          metallb_interface: ens6
+          metallb_pool_name: pool0
+  template:
+    metadata:
+      name: 'metallb-config'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
+        targetRevision: HEAD
+        path: talos/add-ons/metallb
+        helm:
+          values: |
+            metallb_addresspool: "{{values.metallb_addresspool}}"
+            metallb_interface: "{{values.metallb_interface}}"
+            metallb_pool_name: "{{values.metallb_pool_name}}"
+      destination:
+        server: '{{server}}'
+        namespace: metallb-system
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
