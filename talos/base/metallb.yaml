@@ -15,7 +15,7 @@ spec:
           targetRevision: '{{values.targetRevision}}'
   template:
     metadata:
-      name: '{{name}}--metallb'
+      name: 'metallb'
     spec:
       project: default
       sources:
