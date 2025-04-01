@@ -44,3 +44,8 @@ hubble:
 # Enable GatewayAPI
 gatewayAPI:
   enabled: true
+l2announcements.enabled: true
+# https://docs.cilium.io/en/latest/network/l2-announcements/
+k8sClientRateLimit:
+  qps: 65
+  burst: 85
