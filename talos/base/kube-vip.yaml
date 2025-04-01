@@ -31,11 +31,13 @@ spec:
           releaseName: kube-vip
           values: |
             env:
+              vip_interface: "ens6"
               vip_arp: "true"
               lb_enable: "false"
               cp_enable: "false"
               svc_enable: "true"
               vip_leaderelection: "true"
+              svc_election: "true"
       destination:
         server: '{{server}}'
         namespace: kube-system
