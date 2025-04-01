@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: gateway-api-crds
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+        values:
+          targetRevision: main
+    - clusters:
+        selector:
+          matchLabels:
+            environment: prd
+        values:
+          targetRevision: main
+  template:
+    metadata:
+      name: 'gateway-api-crds'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
+        targetRevision: '{{values.targetRevision}}'
+        path: talos/add-ons/gateway-api-crds
+      destination:
+        server: '{{server}}'
+        namespace: 'kube-system'
