@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: longhorn-ns
+  name: longhorn-config
 spec:
   generators:
     - clusters:
@@ -13,7 +13,7 @@ spec:
           targetRevision: main
   template:
     metadata:
-      name: 'longhorn-ns'
+      name: 'longhorn-config'
     spec:
       project: default
       syncPolicy:
@@ -27,7 +27,7 @@ spec:
       source:
         repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
         targetRevision: '{{values.targetRevision}}'
-        path: talos/add-ons/longhorn
+        path: talos/add-ons/longhorn-config
       destination:
         server: '{{server}}'
         namespace: 'kube-system'

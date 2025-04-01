@@ -83,7 +83,7 @@ spec:
       source:
         repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
         targetRevision: HEAD
-        path: talos/add-ons/metallb
+        path: talos/add-ons/metallb-config
         helm:
           values: |
             metallb_addresspool: "{{values.metallb_addresspool}}"

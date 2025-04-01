@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cilium
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+        values:
+          targetRevision: main
+    - clusters:
+        selector:
+          matchLabels:
+            environment: prd
+        values:
+          targetRevision: main
+  template:
+    metadata:
+      name: 'cilium'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
+        targetRevision: '{{values.targetRevision}}'
+        path: talos/add-ons/cilum
+      destination:
+        server: '{{server}}'
+        namespace: 'kube-system'
+      ignoreDifferences:
+        - name: cilium-ca
+          kind: Secret
+          namespace: kube-system
+          jsonPointers:
+            - /data/ca.crt
+            - /data/ca.key
+        - name: hubble-server-certs
+          kind: Secret
+          namespace: kube-system
+          jsonPointers:
+            - /data/ca.crt
+            - /data/tls.crt
+            - /data/tls.key
+        - name: hubble-relay-client-certs
+          kind: Secret
+          namespace: kube-system
+          jsonPointers:
+            - /data/ca.crt
+            - /data/tls.crt
+            - /data/tls.key
+        - kind: Service
+          jqPathExpressions:
+            - '.status.loadBalancer.ingress[].ipMode'
