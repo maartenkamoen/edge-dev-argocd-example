@@ -10,9 +10,14 @@ spec:
         selector:
           matchLabels:
             environment: tst
-            site: nijmegen01
         values:
-          targetRevision: '{{values.targetRevision}}'
+          targetRevision: v0.14.9
+    - clusters:
+        selector:
+          matchLabels:
+            environment: prd
+        values:
+          targetRevision: v0.14.9
   template:
     metadata:
       name: 'metallb'
@@ -21,7 +26,7 @@ spec:
       sources:
         - chart: metallb
           repoURL: https://metallb.github.io/metallb
-          targetRevision: v0.14.9
+          targetRevision: '{{values.targetRevision}}'
           helm:
             releaseName: metallb
       destination:
@@ -49,6 +54,24 @@ spec:
             site: nijmegen01
         values:
           metallb_addresspool: 192.168.122.100-192.168.122.110
+          metallb_interface: ens6
+          metallb_pool_name: pool0
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+            site: nijmegen02
+        values:
+          metallb_addresspool: 192.168.122.111-192.168.122.120
+          metallb_interface: ens6
+          metallb_pool_name: pool0
+    - clusters:
+        selector:
+          matchLabels:
+            environment: prd
+            site: nijmegen01
+        values:
+          metallb_addresspool: 192.168.122.121-192.168.122.130
           metallb_interface: ens6
           metallb_pool_name: pool0
   template:
