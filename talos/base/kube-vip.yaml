@@ -103,21 +103,21 @@ spec:
             environment: tst
             site: nijmegen01
         values:
-          addresspool: 192.168.122.100-192.168.122.109
+          addresspool: 192.168.133.100-192.168.133.109
     - clusters:
         selector:
           matchLabels:
             environment: tst
             site: nijmegen02
         values:
-          addresspool: 192.168.122.110-192.168.122.119
+          addresspool: 192.168.133.110-192.168.133.119
     - clusters:
         selector:
           matchLabels:
             environment: prd
             site: nijmegen01
         values:
-          addresspool: 192.168.122.120-192.168.122.129
+          addresspool: 192.168.133.120-192.168.133.129
   template:
     metadata:
       name: 'kube-vip-configmap'
