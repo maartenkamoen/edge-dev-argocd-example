@@ -122,7 +122,7 @@ data:
   enable-metrics: "true"
   enable-envoy-config: "true"
   envoy-config-retry-interval: "15s"
-  enable-ingress-controller: "true"
+  enable-ingress-controller: "false"
   enforce-ingress-https: "true"
   enable-ingress-proxy-protocol: "false"
   enable-ingress-secrets-sync: "true"
