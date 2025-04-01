@@ -38,7 +38,8 @@ spec:
           allowEmpty: true
           selfHeal: true
         syncOptions:
-          - CreateNamespace=true
+          - CreateNamespace=false
+          - ServerSideApply=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -98,3 +99,4 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+          - ServerSideApply=true
