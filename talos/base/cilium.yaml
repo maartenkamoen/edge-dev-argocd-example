@@ -32,7 +32,7 @@ spec:
       source:
         repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
         targetRevision: '{{values.targetRevision}}'
-        path: talos/add-ons/cilum
+        path: talos/add-ons/cilium
       destination:
         server: '{{server}}'
         namespace: 'kube-system'
