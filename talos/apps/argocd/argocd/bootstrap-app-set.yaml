@@ -69,6 +69,9 @@ spec:
             - /data/ca.crt
             - /data/tls.crt
             - /data/tls.key
+        - kind: Service
+          jqPathExpressions:
+            - '.status.loadBalancer.ingress[].ipMode'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
