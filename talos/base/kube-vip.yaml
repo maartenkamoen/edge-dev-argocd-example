@@ -52,6 +52,47 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
+  name: kube-vip-cloud-provider
+  namespace: argocd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            environment: tst
+        values:
+          targetRevision: v0.2.5
+    - clusters:
+        selector:
+          matchLabels:
+            environment: prd
+        values:
+          targetRevision: v0.2.5
+  template:
+    metadata:
+      name: 'kube-vip-cloud-provider'
+    spec:
+      project: default
+      source:
+        chart: kube-vip-cloud-provider
+        repoURL: https://kube-vip.github.io/helm-charts
+        targetRevision: '{{values.targetRevision}}'
+        helm:
+          releaseName: kube-vip-cloud-provider
+      destination:
+        server: '{{server}}'
+        namespace: kube-system
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
   name: kube-vip-configmap
   namespace: argocd
 spec:
