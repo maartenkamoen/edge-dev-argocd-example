@@ -20,7 +20,7 @@ spec:
           targetRevision: v0.6.6
   template:
     metadata:
-      name: 'ube-vip'
+      name: 'kube-vip'
     spec:
       project: default
       source:
