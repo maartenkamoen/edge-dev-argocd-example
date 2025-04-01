@@ -26,7 +26,7 @@ cilium:
       enabled: false
   # Enable Cilium Ingress Controller
   ingressController:
-    enabled: false
+    enabled: true
   # Use KubePrism to access cluster API
   k8sServiceHost: localhost
   k8sServicePort: 7445
@@ -41,3 +41,6 @@ cilium:
           # Enable Omni Workload Proxying for this service
           omni-kube-service-exposer.sidero.dev/port: "50080"
           omni-kube-service-exposer.sidero.dev/label: Hubble
+  # Enable GatewayAPI
+  gatewayAPI:
+    enabled: true
