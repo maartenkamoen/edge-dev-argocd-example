@@ -5,24 +5,24 @@ metadata:
   name: cluster-api
 spec:
   version: v1.9.6
----
-apiVersion: operator.cluster.x-k8s.io/v1alpha2
-kind: BootstrapProvider
-metadata:
-  name: talos
-spec:
-  version: v0.6.7
----
-apiVersion: operator.cluster.x-k8s.io/v1alpha2
-kind: ControlPlaneProvider
-metadata:
-  name: talos
-spec:
-  version: v0.5.8
----
-apiVersion: operator.cluster.x-k8s.io/v1alpha1
-kind: InfrastructureProvider
-metadata:
-  name: kubevirt
-spec:
-  version: v0.1.8
+# ---
+# apiVersion: operator.cluster.x-k8s.io/v1alpha2
+# kind: BootstrapProvider
+# metadata:
+#   name: talos
+# spec:
+#   version: v0.6.7
+# ---
+# apiVersion: operator.cluster.x-k8s.io/v1alpha2
+# kind: ControlPlaneProvider
+# metadata:
+#   name: talos
+# spec:
+#   version: v0.5.8
+# ---
+# apiVersion: operator.cluster.x-k8s.io/v1alpha1
+# kind: InfrastructureProvider
+# metadata:
+#   name: kubevirt
+# spec:
+#   version: v0.1.8
