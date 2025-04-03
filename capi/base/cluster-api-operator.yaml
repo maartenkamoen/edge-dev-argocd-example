@@ -12,6 +12,15 @@ spec:
     targetRevision: 0.18.1
     helm:
       releaseName: cluster-api-operator
+      values: |
+        resources:
+          manager:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
   ignoreDifferences:
     - group: "*"
       kind: "*"
