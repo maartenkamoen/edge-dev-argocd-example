@@ -19,10 +19,10 @@ spec:
 #   name: talos
 # spec:
 #   version: v0.5.8
-# ---
-# apiVersion: operator.cluster.x-k8s.io/v1alpha1
-# kind: InfrastructureProvider
-# metadata:
-#   name: kubevirt
-# spec:
-#   version: v0.1.8
+---
+apiVersion: operator.cluster.x-k8s.io/v1alpha2
+kind: InfrastructureProvider
+metadata:
+  name: kubevirt
+spec:
+  version: v0.1.8
