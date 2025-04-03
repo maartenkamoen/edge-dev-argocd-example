@@ -25,4 +25,4 @@ kind: InfrastructureProvider
 metadata:
   name: kubevirt
 spec:
-  version: v0.1.8
+  version: v0.1.9
