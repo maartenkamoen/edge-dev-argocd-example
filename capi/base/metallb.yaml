@@ -1,6 +1,6 @@
 ---
 apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
+kind: Application
 metadata:
   name: metallb
   namespace: argocd
@@ -13,7 +13,7 @@ spec:
       helm:
         releaseName: metallb
   destination:
-    server: '{{server}}'
+    server: https://kubernetes.default.svc
     namespace: metallb-system
   syncPolicy:
     automated:
@@ -34,14 +34,14 @@ metadata:
     source:
       repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
       targetRevision: HEAD
-      path: talos/add-ons/metallb-config
+      path: capi/add-ons/metallb-config
       helm:
         values: |
           metallb_addresspool: "192.168.178.220-192.168.178.240"
           metallb_interface: "enp38s0"
           metallb_pool_name: "pool0"
     destination:
-      server: '{{server}}'
+      server: https://kubernetes.default.svc
       namespace: metallb-system
     syncPolicy:
       automated:
