@@ -21,7 +21,7 @@ spec:
       allowEmpty: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true
       - ServerSideApply=true
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -29,25 +29,25 @@ kind: Application
 metadata:
   name: metallb-config
   namespace: argocd
-  spec:
-    project: default
-    source:
-      repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
-      targetRevision: HEAD
-      path: capi/add-ons/metallb-config
-      helm:
-        values: |
-          metallb_addresspool: "192.168.178.220-192.168.178.240"
-          metallb_interface: "enp38s0"
-          metallb_pool_name: "pool0"
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: metallb-system
-    syncPolicy:
-      automated:
-        prune: true
-        allowEmpty: true
-        selfHeal: true
-      syncOptions:
-        - CreateNamespace=true
-        - ServerSideApply=true
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/maartenkamoen/edge-dev-argocd-example.git
+    targetRevision: HEAD
+    path: capi/add-ons/metallb-config
+    helm:
+      values: |
+        metallb_addresspool: "192.168.178.220-192.168.178.240"
+        metallb_interface: "enp38s0"
+        metallb_pool_name: "pool0"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metallb-system
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
